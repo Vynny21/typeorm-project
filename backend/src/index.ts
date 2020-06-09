@@ -2,9 +2,9 @@ import "reflect-metadata";
 import {createConnection} from "typeorm";
 import * as express from "express";
 import * as bodyParser from "body-parser";
-import {Request, Response} from "express";
-import routes from "./routes";
-import {User} from "./entity/User";
+import * as cors from 'cors'
+import * as helmet from 'helmet'
+import routes from "./routes/routes";
 
 // create express app
 const app = express();
@@ -16,8 +16,8 @@ createConnection().then(() => {
 })
 
 app.use(bodyParser.json());
-
+app.use(cors())
 app.use(routes)
-
+app.use(helmet())
 app.listen(3000)
 

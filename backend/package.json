@@ -3,6 +3,7 @@
    "version": "0.0.1",
    "description": "Awesome project developed with TypeORM.",
    "devDependencies": {
+      "@types/body-parser": "^1.19.0",
       "@types/dotenv-safe": "^8.1.0",
       "@types/express": "^4.17.6",
       "@types/node": "^14.0.11",
@@ -11,15 +12,26 @@
       "typescript": "3.3.3333"
    },
    "dependencies": {
+      "@types/bcryptjs": "^2.4.2",
+      "@types/cors": "^2.8.6",
+      "@types/helmet": "^0.0.47",
+      "@types/jsonwebtoken": "^8.5.0",
+      "bcryptjs": "^2.4.3",
       "body-parser": "^1.18.1",
+      "class-validator": "^0.12.2",
+      "cors": "^2.8.5",
       "dotenv-safe": "^8.2.0",
       "express": "^4.15.4",
+      "helmet": "^3.22.0",
+      "jsonwebtoken": "^8.5.1",
       "pg": "^8.2.1",
       "reflect-metadata": "^0.1.10",
       "typeorm": "^0.2.25"
    },
    "scripts": {
-      "start": "ts-node src/index.ts",
-      "dev": "nodemon src/index.ts"
+      "tsc": "tsc",
+      "start": "set debug=* && ts-node-dev --respawn --transpileOnly src/index.ts",
+      "dev": "nodemon src/index.ts",
+      "migration:run": "ts-node ./node_modules/typeorm/cli.js migration:run"
    }
 }
