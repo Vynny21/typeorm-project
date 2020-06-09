@@ -48,7 +48,7 @@ A validation package that works really well with TypeORM
 Automatically restarts the server when we change any file
 
 # Operation of user requests
-<img src="assets/image-project.png" alt="User Requests">
+<img src="assets/image-project/image-project.png" alt="User Requests">
 
 
 # Project TypeORM & Express => Steps to run this project on your machine:
