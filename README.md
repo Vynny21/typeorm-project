@@ -5,50 +5,50 @@ Projeto criado com TypeORM, usando o PostgreSQL e o Express
 Uma API de authenticação e relacionamento de usuários e projetos
 
 # Libraries
-<h1>Express</h1>
+<h3>Express</h3>
 Framework based API development
 
-<h1>typeorm</h1>
+<h3>typeorm</h3>
 The ORM we are going to use to manipulate database
 
-<h1>PostgreSQL</h1>
+<h3>PostgreSQL</h3>
 Opensource SQL database
 
-<h1>sqlite3</h1>
+<h3>sqlite3</h3>
 We are going to use sqlite as dev database
 
-<h1>Eslint</h1>
+<h3>Eslint</h3>
 Ainda não implementado
 
-<h1>Prettier</h1>
+<h3>Prettier</h3>
 Ainda não implementado
 
-<h1>helmet</h1>
+<h3>helmet</h3>
 Help us to secure our application by setting various HTTP headers
 
-<h1>cors</h1>
+<h3>cors</h3>
 Enable cross-origin Requests
 
-<h1>body-parser</h1>
+<h3>body-parser</h3>
 Parses the client’s request from json into javascript objects
 
-<h1>jsonwebtoken</h1>
+<h3>jsonwebtoken</h3>
 Will handle the jwt operations for us
 
-<h1>bcryptjs</h1>
+<h3>bcryptjs</h3>
 Help us to hash user passwords
 
-<h1>reflect-metadata</h1>
+<h3>reflect-metadata</h3>
 allow some annotations features used with TypeORM
 
-<h1>class-validator</h1>
+<h3>class-validator</h3>
 A validation package that works really well with TypeORM
 
-<h1>nodemon</h1>
+<h3>nodemon</h3>
 Automatically restarts the server when we change any file
 
 # Operation of user requests
-<img src="assets-proj/image-project.png" alt="User Requests">
+<img src="assets/image-project.png" alt="User Requests">
 
 
 # Project TypeORM & Express => Steps to run this project on your machine:
