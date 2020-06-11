@@ -3,14 +3,20 @@ import {
   PrimaryGeneratedColumn, 
   Column, 
   CreateDateColumn, 
-  UpdateDateColumn 
+  UpdateDateColumn, 
+  ManyToOne,
+  JoinColumn
 } from 'typeorm'
+import { User } from './User'
 
-@Entity()
-export class Tasks {
+@Entity('task')
+export class Task {
 
   @PrimaryGeneratedColumn()
   id: number
+
+  @ManyToOne(type => User, user => user.task)
+  user: User
 
   @Column()
   title: string

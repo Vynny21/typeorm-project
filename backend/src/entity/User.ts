@@ -4,17 +4,38 @@ import {
     Column, 
     CreateDateColumn, 
     UpdateDateColumn,
-    Unique
+    Unique,
+    OneToMany,
+    JoinColumn,
+    OneToOne
 } from "typeorm";
 import { IsNotEmpty } from 'class-validator'
 import * as bcrypt from 'bcryptjs'
+import { Task } from './Task'
+import { Profile } from "./Profile";
 
-@Entity()
+/* O decorator @JoinColumn() significa que a tabela que o herda é o dono da relação */
+
+@Entity('user')
 @Unique(['username'])
 export class User {
 
     @PrimaryGeneratedColumn()
     id: number;
+
+    @OneToMany(type => Task, task => task.user, {
+      cascade: true,
+      eager: true
+    })
+    @JoinColumn({ name: 'id' })
+    task: Task
+
+    @OneToOne(type => Profile, profile => profile.user , {
+      cascade: true,
+      eager: true
+    })
+    @JoinColumn({ name: 'id' })
+    profile: Profile
 
     @Column()
     username: string;
@@ -24,18 +45,6 @@ export class User {
 
     @Column()
     email: string;
-
-    @Column()
-    phone: number;
-
-    @Column()
-    whatsapp: number;
-
-    @Column()
-    address: string;
-
-    @Column()
-    zip_code: number;
 
     @Column()
     @IsNotEmpty()
