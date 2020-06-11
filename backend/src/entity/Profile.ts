@@ -1,15 +1,16 @@
-import { 
-  PrimaryGeneratedColumn, 
-  Entity, 
+/* eslint-disable camelcase */
+import {
+  PrimaryGeneratedColumn,
+  Entity,
   Column,
-  OneToOne
-} from "typeorm";
+  OneToOne,
+  CreateDateColumn,
+  UpdateDateColumn
+} from 'typeorm'
 import { User } from './User'
-
 
 @Entity('profile')
 export class Profile {
-
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -23,8 +24,14 @@ export class Profile {
   address: string;
 
   @Column()
-  zip_code: string;
+  zipcode: string;
 
   @OneToOne(type => User, user => user.profile)
   user: User
+
+  @CreateDateColumn()
+  created_at: Date
+
+  @UpdateDateColumn()
+  updated_at: Date
 }

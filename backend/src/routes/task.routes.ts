@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import TasksController from '../controller/TasksController'
 
- const router = Router()
+const router = Router()
 
 router.get('/', TasksController.getTasks)
 router.get('/:id', TasksController.getTask)

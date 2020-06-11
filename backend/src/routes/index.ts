@@ -1,16 +1,16 @@
+/* eslint-disable no-unused-vars */
 import { Router, Request, Response } from 'express'
-import * as express from 'express'
 
-//Routes
+// Routes
 import task from './task.routes'
 import auth from './auth.routes'
 import user from './user.routes'
 import profile from './profile.routes'
 
- const routes = Router()
+const routes = Router()
 
 routes.get('/', async (req: Request, res: Response) => {
-    return res.json({ message: 'Hello World' })
+  return res.json({ message: 'Hello World' })
 })
 
 routes.use('/auth', auth)

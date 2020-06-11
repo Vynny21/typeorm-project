@@ -1,17 +1,16 @@
-import { 
-  Entity, 
-  PrimaryGeneratedColumn, 
-  Column, 
-  CreateDateColumn, 
-  UpdateDateColumn, 
-  ManyToOne,
-  JoinColumn
+/* eslint-disable camelcase */
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+  ManyToOne
 } from 'typeorm'
 import { User } from './User'
 
 @Entity('task')
 export class Task {
-
   @PrimaryGeneratedColumn()
   id: number
 
