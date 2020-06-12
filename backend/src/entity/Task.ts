@@ -14,9 +14,6 @@ export class Task {
   @PrimaryGeneratedColumn()
   id: number
 
-  @ManyToOne(type => User, user => user.task)
-  user: User
-
   @Column()
   title: string
 
@@ -25,6 +22,9 @@ export class Task {
 
   @Column({ default: false })
   finished: Boolean
+
+  @ManyToOne(() => User, (user) => user.task)
+  user: User
 
   @CreateDateColumn()
   created_at: Date

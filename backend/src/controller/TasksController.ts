@@ -12,7 +12,10 @@ não ao objeto instanciado. */
 
 class TasksController {
   static getTasks = async (request: Request, response: Response) => {
-    const tasks = await getRepository(Task).find()
+    const tasks = await getRepository(Task).find({
+      select: ['id', 'title', 'description', 'finished', 'created_at', 'updated_at'],
+      relations: ['user']
+    })
 
     if (!tasks) {
       return response.json({ error: 'Tasks not found.' })
@@ -23,12 +26,25 @@ class TasksController {
 
   static getTask = async (request: Request, response: Response) => {
     const { id } = request.params
-    const task = await getRepository(Task).findOne(id)
+
+    const task = await getRepository(Task).findOne({
+      select: ['id', 'title', 'description', 'finished', 'created_at', 'updated_at'],
+      relations: ['user']
+    })
 
     return response.json(task)
   }
 
   static saveTask = async (request: Request, response: Response) => {
+    const id = request.params.id
+    const taskRepository = getRepository(Task)
+
+    const taskId = await taskRepository.findOne(id)
+
+    if (taskId) {
+      return response.json({ error: 'Task already exist.' })
+    }
+
     const task = await getRepository(Task).save(request.body)
 
     return response.json(task)

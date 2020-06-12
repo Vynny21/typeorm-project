@@ -1,10 +1,8 @@
 /* eslint-disable no-unused-vars */
 import { Request, Response } from 'express'
 import { getRepository } from 'typeorm'
-import { validate } from 'class-validator'
 
 import { User } from '../entity/User'
-import { Task } from '../entity/Task'
 
 class UserController {
     static listAll = async (req: Request, res: Response) => {
@@ -12,7 +10,7 @@ class UserController {
       const userRepository = getRepository(User)
 
       const users = await userRepository.find({
-        select: ['id', 'username', 'role'],
+        select: ['id', 'username', 'role', 'created_at', 'updated_at'],
         relations: ['profile', 'task'] // We dont want to send the passwords on response
       })
 
@@ -23,14 +21,21 @@ class UserController {
     static getOneById = async (req: Request, res: Response) => {
       // Get the ID from the url
       const id = req.params.id
+      const user = new User()
 
       // Get the profile user from database
       // Query Builder
       try {
-        const user = getRepository(User)
-          .createQueryBuilder('user')
-          .leftJoinAndMapMany('user.profile', 'profile', 'user.task', 'task')
-          .getOne()
+        const userRepo = getRepository(User)
+
+        const user = await userRepo.find({
+          select: ['id', 'username', 'password', 'email', 'role', 'created_at', 'updated_at'],
+          relations: ['profile', 'task']
+        })
+
+        if (!user) {
+          return res.status(404).json({ error: 'User not found.' })
+        }
 
         // Returning a single user
         return res.status(200).json(user)
@@ -40,18 +45,16 @@ class UserController {
     }
 
     static newUser = async (req: Request, res: Response) => {
+      // Get the ID from the url
+      const id = req.params.id
+
       // Get parameters from the body
-      const { username, password, role } = req.body
+      const { username, password, email, role } = req.body
       const user = new User()
       user.username = username
       user.password = password
+      user.email = email
       user.role = role
-
-      // Validade if the parameters are ok
-      const errors = await validate(user)
-      if (errors.length > 0) {
-        return res.status(400).send(errors)
-      }
 
       // Hash the password, to securely store on DB
       user.hashPassword()
@@ -59,9 +62,12 @@ class UserController {
       // Try to save. If fails, the username is already in use
       const userRepository = getRepository(User)
       try {
-        await userRepository.save(user)
+        const userID = await userRepository.findOne(id)
+        if (!userID) {
+          await userRepository.save(user)
+        }
       } catch (e) {
-        return res.status(409).send('Username already in use')
+        return res.status(409).send('Username already in use:' + e)
       }
 
       // If all ok, send 201 response
@@ -82,26 +88,17 @@ class UserController {
         user = await userRepository.findOneOrFail(id, { relations: ['profile', 'tasks'] })
       } catch (error) {
         // If not found, send a 404 response
-        res.status(404).send('User not found')
-        return
-      }
-
-      // Validate the new values on model
-      user.username = username
-      user.role = role
-      const errors = await validate(user)
-      if (errors.length > 0) {
-        return res.status(400).send(errors)
+        return res.status(404).send('User not found')
       }
 
       // Try to safe, if fails, that means username already in use
       try {
         await userRepository.save(user)
       } catch (e) {
-        return res.status(409).send('Username already in use')
+        return res.status(409).send('Do not update it.')
       }
       // After all send a 204 (no content, but accepted) response
-      res.status(204).json({ message: 'User successfully updated!' })
+      return res.status(204).json({ message: 'User successfully updated!' })
     }
 
     static deleteUser = async (req: Request, res: Response) => {
@@ -119,7 +116,7 @@ class UserController {
       userRepository.delete(id)
 
       // After all send a 204 (no content, but accepted) response
-      return res.status(204).json({ message: 'User successfully deleted!' })
+      return res.json({ message: 'User successfully deleted!' })
     }
 }
 

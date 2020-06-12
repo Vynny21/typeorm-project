@@ -1,17 +1,17 @@
+/* eslint-disable no-unused-vars */
 import { Request, Response, NextFunction } from 'express'
 import * as jwt from 'jsonwebtoken'
 import config from '../config/config'
 
 export const checkJwt = (req: Request, res: Response, next: NextFunction) => {
   // Get the token from the head
-  const token = <string>req.headers['auth']
+  const token = <string>req.headers.auth
   let jwtPayload
 
   // Try to validate token and get data
   try {
     jwtPayload = <any>jwt.verify(token, config.jwtSecret)
     res.locals.jwtPayload = jwtPayload
-
   } catch {
     // If token is not valid, respond with 401 (unauthorized)
     return res.status(401).json({ error: 'User unauthorized.' })

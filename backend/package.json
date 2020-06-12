@@ -45,8 +45,9 @@
    },
    "scripts": {
       "tsc": "tsc",
-      "start": "set debug=* && ts-node-dev --respawn --transpileOnly src/index.ts",
-      "dev": "nodemon src/index.ts",
+      "lint": "tslint -p tsconfig.json -c tslint.json",
+      "start": "set debug=* && ts-node-dev --respawn --transpileOnly src/server.ts",
+      "dev": "nodemon src/server.ts",
       "migration:run": "ts-node ./node_modules/typeorm/cli.js migration:run"
    }
 }

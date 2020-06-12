@@ -9,10 +9,10 @@ import { Profile } from '../entity/Profile'
 class ProfileController {
     static listAll = async (req: Request, res: Response) => {
       // Get users from database
-      const userRepository = getRepository(Profile)
+      const profileRepository = getRepository(Profile)
 
-      const userProfile = await userRepository.find({
-        select: ['phone', 'whatsapp', 'address', 'zipcode'],
+      const userProfile = await profileRepository.find({
+        select: ['id', 'phone', 'whatsapp', 'address', 'zipcode'],
         relations: ['user'] // We dont want to send the passwords on response
       })
 
@@ -28,16 +28,33 @@ class ProfileController {
       // Query Builder
       try {
         const userProfile = getRepository(Profile)
-          .createQueryBuilder('profile')
-          .leftJoinAndSelect('profile.user', 'user')
-          .getOne()
+
+        const profileRepository = await userProfile.findOne({
+          select: ['id', 'phone', 'whatsapp', 'address', 'zipcode'],
+          relations: ['user']
+        })
 
         // Returning a single user
-        return res.status(200).json(userProfile)
+        return res.status(200).json(profileRepository)
       } catch (error) {
         return res.status(404).send('User not found')
       }
-    };
+    }
+
+    static saveProfile = async (request: Request, response: Response) => {
+      const id = request.body
+      const profileRepository = getRepository(Profile)
+
+      const profileId = await profileRepository.findOne(id)
+
+      if (profileId) {
+        return response.json({ error: 'Task already exist.' })
+      }
+
+      const profile = await getRepository(Profile).save(request.body)
+
+      return response.json(profile)
+    }
 
     static updateProfile = async (req: Request, res: Response) => {
       // Get the ID from the url
@@ -61,7 +78,7 @@ class ProfileController {
       userProfile.username = phone
       userProfile.whatsapp = whatsapp
       userProfile.address = address
-      userProfile.zip_code = zipcode
+      userProfile.zipcode = zipcode
       const errors = await validate(userProfile)
       if (errors.length > 0) {
         return res.status(400).send(errors)
@@ -92,7 +109,7 @@ class ProfileController {
       userRepository.delete(id)
 
       // After all send a 204 (no content, but accepted) response
-      return res.status(204).json({ message: 'User successfully deleted!' })
+      return res.json({ message: 'User successfully deleted!' })
     }
 }
 

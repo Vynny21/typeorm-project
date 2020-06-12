@@ -14,10 +14,10 @@ export class Profile {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column('numeric')
   phone: number;
 
-  @Column()
+  @Column('numeric')
   whatsapp: number;
 
   @Column()
@@ -26,7 +26,7 @@ export class Profile {
   @Column()
   zipcode: string;
 
-  @OneToOne(type => User, user => user.profile)
+  @OneToOne(() => User, (user) => user.profile)
   user: User
 
   @CreateDateColumn()
